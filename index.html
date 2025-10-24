@@ -117,7 +117,13 @@
         let taskInput = document.getElementById("taskInput");
         let btn = document.getElementById("addTaskBtn");
         btn.addEventListener("click", () => {
-          taskInputValue = taskInput.value;
+           let taskInputValue = "";
+          if (taskInput.value != "") {
+            taskInputValue = taskInput.value;
+          } else {
+            alert("Please write a todo task");
+            return;
+          }
           ///api
           fetch("https://dummyjson.com/todos/add", {
             method: "POST",
@@ -135,6 +141,7 @@
               console.log(todosFromStorage);
               localStorage.setItem("todos", JSON.stringify(todosFromStorage));
               getTodos();
+              taskInput.value = "";
             });
         });
       }
@@ -150,31 +157,31 @@
       // delete todo
       function handleDelete(id) {
         // without api
-        // let todosFromStorage = JSON.parse(localStorage.getItem("todos"));
-        // for (let i = 0; i < todosFromStorage.length; i++) {
-        //   if (todosFromStorage[i].id === id) {
-        //     console.log("deleted", todosFromStorage[i]);
-        //     todosFromStorage.splice(i, 1);
-        //     localStorage.setItem("todos", JSON.stringify(todosFromStorage));
-        //     getTodos();
-        //     break;
-        //   }
-        // }
-        fetch(`https://dummyjson.com/todos/${id}`, {
-          method: "DELETE",
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            let todosFromStorage = JSON.parse(localStorage.getItem("todos"));
-            for (let i = 0; i < todosFromStorage.length; i++) {
-              if (todosFromStorage[i].id === data.id) {
-                todosFromStorage.splice(i, 1);
-                localStorage.setItem("todos", JSON.stringify(todosFromStorage));
-                getTodos();
-                break;
-              }
-            }
-          });
+        let todosFromStorage = JSON.parse(localStorage.getItem("todos"));
+        for (let i = 0; i < todosFromStorage.length; i++) {
+          if (todosFromStorage[i].id === id) {
+            console.log("deleted", todosFromStorage[i]);
+            todosFromStorage.splice(i, 1);
+            localStorage.setItem("todos", JSON.stringify(todosFromStorage));
+            getTodos();
+            break;
+          }
+        }
+        // fetch(`https://dummyjson.com/todos/${id}`, {
+        //   method: "DELETE",
+        // })
+        //   .then((res) => res.json())
+        //   .then((data) => {
+        //     let todosFromStorage = JSON.parse(localStorage.getItem("todos"));
+        //     for (let i = 0; i < todosFromStorage.length; i++) {
+        //       if (todosFromStorage[i].id === data.id) {
+        //         todosFromStorage.splice(i, 1);
+        //         localStorage.setItem("todos", JSON.stringify(todosFromStorage));
+        //         getTodos();
+        //         break;
+        //       }
+        //     }
+        //   });
       }
       addTodo();
     </script>
